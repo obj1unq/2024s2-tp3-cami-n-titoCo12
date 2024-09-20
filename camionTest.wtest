@@ -1,0 +1,221 @@
+import cosas.*
+import camion.*
+import almacen.*
+
+describe "tests de camion"{
+
+// cargar(cosa) y descargar(cosa) -----------------------------------------
+
+    test "camion carga y descarga knightRider" {
+
+        camion.cargar(knightRider)
+
+        assert.equals(#{knightRider}, camion.cosas())
+
+        camion.descargar(knightRider)
+
+        assert.equals(#{}, camion.cosas())
+    }
+
+// todoPesoPar() -----------------------------------------
+
+    test "el peso de todos los elementos de camion con knighrRider y bumblebee es par,
+         pero si agrego 23 kilos de arena ya no es par" {
+
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+
+        assert.that(camion.todoPesoPar())
+
+        camion.cargar(arena)
+        arena.agregarPeso(3)
+
+        assert.notThat(camion.todoPesoPar())
+
+    }
+
+// hayAlgunoQuePesa(peso) -----------------------------------------
+
+    test "en camion con knightrider y bumblebee hay alguno que pese 800 y alguno que pese 500,
+         pero no hay ninguno que pese 200" {
+
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+
+        assert.that(camion.hayAlgunoQuePesa(800))
+        assert.that(camion.hayAlgunoQuePesa(500))
+        assert.notThat(camion.hayAlgunoQuePesa(200))
+
+    }
+
+// elDeNivel(nivel) -----------------------------------------
+
+    test "en camion con knightRider y bumblebee el de nivel de peligro de 30 es bumblebee,
+         pero pedir el de peligro 60 tira excepción" {
+        
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+
+        assert.equals(bumblebee, camion.elDeNivel(30))
+        assert.throwsException({ camion.elDeNivel(60) })
+
+    }
+
+// pesoTotal() -----------------------------------------
+
+    test "camion con knightRider y 12 ladrillos pesa un total de 1524 (y sin nada pesa 1000 por la tara)" {
+
+        assert.equals(1000, camion.pesoTotal())
+
+        camion.cargar(ladrillos)
+        camion.cargar(knightRider)
+
+        assert.equals(1524, camion.pesoTotal())
+    }
+
+// excedidoDePeso() -----------------------------------------   
+
+    test "camion con knightRider, bumblebee y 800 kilos de arena esta excedido de peso" {
+        arena.agregarPeso(780)
+        
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+        camion.cargar(arena)
+
+        assert.that(camion.excedidoDePeso())
+        
+    }
+
+// objetosQueSuperanPeligrosidad(nivel) -----------------------------------------
+
+    test "en camion con knightRider, bumblebee y residuos; bumblebee y los residuos superan
+         un nivel de peligrosidad de 20; los residuos solos superan un nivel de 150; pero ninguno
+         un nivel de 200" {
+
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+        camion.cargar(residuos)
+
+        assert.equals(#{bumblebee, residuos},camion.objetosQueSuperanPeligrosidad(20))
+        assert.equals(#{residuos},camion.objetosQueSuperanPeligrosidad(150))
+        assert.equals(#{},camion.objetosQueSuperanPeligrosidad(200))
+    }
+
+// objetosMasPeligrososQue(cosa) -----------------------------------------
+
+    test "en camion con knightRider y bateria con misiles; ambos son mas peligrosos que arena; 
+         la bateria es mas peligrosa que bumblebee; y ninguno es mas peligroso que residuos" {
+
+        bateria.cargaMisiles()
+
+        camion.cargar(knightRider)
+        camion.cargar(bateria)
+
+        assert.equals(#{knightRider,bateria}, camion.objetosMasPeligrososQue(arena))
+        assert.equals(#{bateria}, camion.objetosMasPeligrososQue(bumblebee))
+        assert.equals(#{}, camion.objetosMasPeligrososQue(residuos))
+    }
+
+// puedeCircularEnRuta(nivel) -----------------------------------------
+
+    test "camion con knightRider puede circular en ruta con nivel de peligrosidad 50,
+         pero no si lleva 1520 kilos de arena o residuos" {
+
+        arena.agregarPeso(1500)
+
+        camion.cargar(knightRider)
+
+        assert.that(camion.puedeCircularEnRuta(50))
+        
+        camion.cargar(arena)
+
+        assert.notThat(camion.puedeCircularEnRuta(50))
+
+        camion.descargar(arena)
+        camion.cargar(residuos)
+
+        assert.notThat(camion.puedeCircularEnRuta(50))
+    }
+
+// tieneAlgoQuePesaEntre(min,max) -----------------------------------------
+
+    test "camion con knightider y bumblebee tiene algo que pesa entre 400 y 900,
+         pero no algo que pese entre 1000 y 1200" {
+
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+
+        assert.that(camion.tieneAlgoQuePesaEntre(400,900))
+        assert.notThat(camion.tieneAlgoQuePesaEntre(1000,1200))
+    }
+
+// cosaMasPesada() -----------------------------------------
+
+    test "en camion con knightRider y bumblebee la cosa mas pesada es bumblebee" {
+
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+
+        assert.equals(bumblebee, camion.cosaMasPesada())
+    }
+
+// pesos() -----------------------------------------
+
+    test "en camion con knightRider y bumblebee la lista de pesos es [500,800]" {
+
+        camion.cargar(knightRider)
+        camion.cargar(bumblebee)
+
+        assert.equals([500,800], camion.pesos())
+    }
+
+// totalBultos() -----------------------------------------
+
+    test "en camion con knightRider, 312 ladrillos y residuos el total de bultos es
+         de 5" {
+
+        ladrillos.agregarLadrillos(300)
+
+        camion.cargar(knightRider)
+        camion.cargar(ladrillos)
+        camion.cargar(residuos)
+
+        assert.equals(5, camion.totalBultos())
+    }
+
+// transportar(destino,camino) -----------------------------------------
+
+    test "camion con knightRider puede y se transporta a almacen por la ruta 9 y deja a knightRider" {
+
+        camion.cargar(knightRider)
+        assert.equals(#{knightRider}, camion.cosas())
+
+
+        camion.transportar(almacen, rutaNueve)
+
+        assert.equals(#{}, camion.cosas())
+        assert.equals(#{knightRider}, almacen.cosas())
+    }
+
+    test "camion con 520 kilos de arena puede y se transporta a almacen por caminos vecinales y deja la arena" {
+        
+        vecinales.pesoMax(1700)
+
+        arena.agregarPeso(500)
+
+        camion.cargar(arena)
+        assert.equals(#{arena}, camion.cosas())
+
+        camion.transportar(almacen,vecinales)
+
+        assert.equals(#{}, camion.cosas())
+        assert.equals(#{arena}, almacen.cosas())
+    }
+    
+    test "camion con bumblebee no puede transportar a almacen por ruta 9 y tira excepción" {
+
+        camion.cargar(bumblebee)
+
+        assert.throwsException({ camion.transportar(almacen,rutaNueve) })
+    }
+}
