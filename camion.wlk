@@ -21,7 +21,7 @@ object camion {
 
 
 	method todoPesoPar() {
-		return cosas.all({ cosa => (cosa.peso()/2)*2 == (cosa.peso()) })
+		return cosas.all({ cosa => cosa.peso().even() })
 	}
 
 
@@ -56,12 +56,12 @@ object camion {
 
 
 	method ningunoSuperaNivelDePeligro(niv) {
-		return self.objetosQueSuperanPeligrosidad(niv) == []
+		return self.objetosQueSuperanPeligrosidad(niv) == #{}
 	}
 
 	method puedeCircularEnRuta(nivMaxPeligro) {
 		 return (not(self.excedidoDePeso())) and
-		 (self.objetosQueSuperanPeligrosidad(nivMaxPeligro) == [])
+		 (self.objetosQueSuperanPeligrosidad(nivMaxPeligro) == #{})
 	}
 
 // Agregados al camión ------------------------------------------------
@@ -103,11 +103,11 @@ object camion {
 	}
 
 	method validarBultos(destino) {
-		if (self.totalBultos() > destino.bultosMax()) {self.error("esta excedido de bultos")}
+		if ((self.totalBultos() + destino.totalBultos()) > destino.bultosMax()) {self.error("esta excedido de bultos")}
 	}
 
 	method validarCamino(camino) {
-		if (not camino.camionPuedePasar(self)) {self.error("esta excedido de peligrosidad")}
+		if (not camino.camionPuedePasar(self)) {self.error("no puede pasar por " + camino)}
 	}
 }
 

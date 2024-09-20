@@ -1,1 +1,89 @@
 import cosas.*
+import camion.*
+
+describe "cosas" {
+
+    test "bumblebee" {
+
+        assert.equals(15,bumblebee.nivelPeligrosidad())
+
+        camion.cargar(bumblebee)
+        //al ser cargado se transforma en robot y aumenta su peligrosidad
+
+        assert.equals(30,bumblebee.nivelPeligrosidad())
+    }
+
+    test "ladrillos" {
+
+        ladrillos.agregarLadrillos(100)
+
+        assert.equals(200, ladrillos.peso())
+
+        camion.cargar(ladrillos)
+        //al ser cargados se agregan 12 ladrillos
+
+        assert.equals(112, ladrillos.cantidad())
+        assert.equals(224, ladrillos.peso())
+    }
+
+    test "arena" {
+
+        assert.equals(0, arena.peso())
+
+        camion.cargar(arena)
+        //al ser cargada se agregan 20 kilos
+
+        assert.equals(20, arena.peso())
+    }
+
+    test "bateria" {
+
+        bateria.remueveMisiles()
+
+        assert.equals(200, bateria.peso())
+        assert.equals(0,bateria.nivelPeligrosidad())
+
+        camion.cargar(bateria)
+        //al ser cargada se equipan los misiles
+
+        assert.that(bateria.tieneMisiles())
+        assert.equals(300, bateria.peso())
+        assert.equals(100, bateria.nivelPeligrosidad())
+    }
+
+    test "contenedor" {
+
+        assert.equals(100,contenedor.peso())
+        assert.equals(0,contenedor.nivelPeligrosidad())
+
+        contenedor.cargar(bumblebee)
+        contenedor.cargar(knightRider)
+
+        assert.equals(1400,contenedor.peso())
+        assert.equals(15,contenedor.nivelPeligrosidad())
+
+        camion.cargar(contenedor)
+        //todos los objetos dentro del mismo deberian reaccionar (bumblebee se vuelve robot y knight nada)
+
+        assert.equals(30,contenedor.nivelPeligrosidad())
+        assert.equals(30,bumblebee.nivelPeligrosidad())
+    }
+
+    test "residuos" {
+
+        assert.equals(0,residuos.peso())
+
+        camion.cargar(residuos)
+        //su peso deberia aumentar 15 kilos
+
+        assert.equals(15,residuos.peso())
+    }
+
+    test "embalaje de seguridad" {
+
+        embalaje.cosaEmbalada(residuos)
+
+        assert.equals(200,residuos.nivelPeligrosidad())
+        assert.equals(100,embalaje.nivelPeligrosidad())
+    }
+}

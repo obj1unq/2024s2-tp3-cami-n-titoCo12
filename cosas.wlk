@@ -39,13 +39,17 @@ object auto {
 }
 
 object robot {
-	method nivelPeligrosidad() {return 15}
+	method nivelPeligrosidad() {return 30}
 }
 
 object ladrillos {
 	var cantidad = 0
 	method peso() {return cantidad * 2}
 	method nivelPeligrosidad() {return 2}
+
+	method cantidad() {
+		return cantidad
+	}
 
 	method agregarLadrillos(cant) {
 		cantidad += cant
@@ -76,6 +80,10 @@ object arena {
 	method nivelPeligrosidad() {return 1}
 	method valorBulto() {return 1}
 
+	method peso() {
+		return peso
+	}
+
 	method agregarPeso(cant) {
 		peso += cant
 	}
@@ -96,6 +104,10 @@ object arena {
 
 object bateria {
 	var tieneMisiles = false
+
+	method tieneMisiles() {
+		return tieneMisiles
+	}
 
 	method cargaMisiles() {
 		tieneMisiles = true
@@ -131,7 +143,11 @@ object bateria {
 
 
 object contenedor {
-	var property cosas = []
+	var property cosas = #{}
+
+	method cargar(cosa) {
+		cosas.add(cosa)
+	} 
 
 	method peso() {
 		return 100 + (cosas.sum({ cosa => cosa.peso() }))
@@ -139,7 +155,7 @@ object contenedor {
 
 	method nivelPeligrosidad() {
 		return if (cosas.isEmpty()) {0}
-		else {(cosas.max({ cosa => cosa.nivelPeligrosidad() }))}
+		else {(cosas.map({ cosa => cosa.nivelPeligrosidad() })).max()}
 	}
 
 	method esMasPeligrosaQue(cosa) {
@@ -151,7 +167,7 @@ object contenedor {
 	}
 
 	method reaccionCargar() {
-		cosas.forEach({cosa => cosa.reaccionarCarga()})
+		cosas.forEach({cosa => cosa.reaccionCargar()})
 	}
 }
 
@@ -160,6 +176,11 @@ object residuos {
 	var peso = 0
 	method nivelPeligrosidad() {return 200}
 	method valorBulto() {return 1}
+
+
+	method peso() {
+		return peso
+	}
 
 	method agregarPeso(cant) {
 		peso += cant
@@ -182,7 +203,7 @@ object residuos {
 object embalaje {
 	var property cosaEmbalada = arena
 	method peso() {return cosaEmbalada.peso()}
-	method nivelPeligrosidad() {return cosaEmbalada.nivelPeligrosidad()/2}
+	method nivelPeligrosidad() {return (cosaEmbalada.nivelPeligrosidad()/2)}
 	method valorBulto() {return 1}
 
 	method esMasPeligrosaQue(cosa) {
