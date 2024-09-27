@@ -7,7 +7,7 @@ describe "cosas" {
 
         assert.equals(15,bumblebee.nivelPeligrosidad())
 
-        camion.cargar(bumblebee)
+        camion1.cargar(bumblebee)
         //al ser cargado se transforma en robot y aumenta su peligrosidad
 
         assert.equals(30,bumblebee.nivelPeligrosidad())
@@ -19,7 +19,7 @@ describe "cosas" {
 
         assert.equals(200, ladrillos.peso())
 
-        camion.cargar(ladrillos)
+        camion1.cargar(ladrillos)
         //al ser cargados se agregan 12 ladrillos
 
         assert.equals(112, ladrillos.cantidad())
@@ -30,7 +30,7 @@ describe "cosas" {
 
         assert.equals(0, arena.peso())
 
-        camion.cargar(arena)
+        camion1.cargar(arena)
         //al ser cargada se agregan 20 kilos
 
         assert.equals(20, arena.peso())
@@ -43,7 +43,7 @@ describe "cosas" {
         assert.equals(200, bateria.peso())
         assert.equals(0,bateria.nivelPeligrosidad())
 
-        camion.cargar(bateria)
+        camion1.cargar(bateria)
         //al ser cargada se equipan los misiles
 
         assert.that(bateria.tieneMisiles())
@@ -62,7 +62,7 @@ describe "cosas" {
         assert.equals(1400,contenedor.peso())
         assert.equals(15,contenedor.nivelPeligrosidad())
 
-        camion.cargar(contenedor)
+        camion1.cargar(contenedor)
         //todos los objetos dentro del mismo deberian reaccionar (bumblebee se vuelve robot y knight nada)
 
         assert.equals(30,contenedor.nivelPeligrosidad())
@@ -73,7 +73,7 @@ describe "cosas" {
 
         assert.equals(0,residuos.peso())
 
-        camion.cargar(residuos)
+        camion1.cargar(residuos)
         //su peso deberia aumentar 15 kilos
 
         assert.equals(15,residuos.peso())
